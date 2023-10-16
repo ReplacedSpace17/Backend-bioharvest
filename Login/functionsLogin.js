@@ -1,53 +1,37 @@
-const connection = require('../../SQL_CONECTION');
+const connection = require('../SQL_CONECTION');
 const { v4: uuidv4 } = require('uuid');
 
+async function Login(req, res, data) {
+  const { Email, Password } = data;
+  console.log(Email);
 
-function generarTokenID(){
-  return uuidv4();
+  try {
+    const query = 'SELECT * FROM usuarios WHERE "email" = $1';
+    const { rows } = await connection.query(query, [Email]);
+
+    if (rows.length === 1) {
+      // Usuario encontrado, verificar la contraseña
+      const user = rows[0];
+      if (user.password === Password) {
+        // Contraseña coincidente, inicio de sesión exitoso
+        console.log("Bienvenido user");
+        res.status(200).json({ message: 'Inicio de sesión exitoso', user });
+      } else {
+        // Contraseña incorrecta
+        console.log("Auth fallida");
+        res.status(401).json({ error: 'Error de autenticación: contraseña incorrecta' });
+      }
+    } else {
+      // No se encontró el usuario
+      res.status(404).json({ error: 'Error de autenticación: usuario no encontrado' });
+    }
+  } catch (error) {
+    console.error('Error en el inicio de sesión:', error);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
 }
 
-function InsertarPersonal(res, req, data) {
 
-  //Generar token
-  const token = generarTokenID();
-
-  //Crear json nuevos
-  const dataPersonal = {
-    ID: token,
-    Nombre: data.Nombre,
-    ApellidoPaterno: data.AP,
-    ApellidoMaterno: data.AM,
-  }
-
-  const accessData= {
-    ID: token,
-    Email: data.Email,
-    Password: data.Pass
-  }
-
-  //Enviar datos
-  //-------> Tabla personalaccess
-  connection.query('INSERT INTO personalaccess SET ?', accessData, (error, results) => {
-    if (error) {
-      console.error('Error al realizar el INSERT:', error);
-      res.status(500).json({ error: 'Ocurrió un error al agregar el usuario' });
-    } else {
-      res.status(201).json({ message: 'Usuario agregado' });
-    }
-  });
-  //-------> Tabla personalinformation
-  connection.query('INSERT INTO personalinformation SET ?', dataPersonal, (error, results) => {
-    if (error) {
-      console.error('Error al realizar el INSERT:', error);
-      res.status(500).json({ error: 'Ocurrió un error al agregar el usuario' });
-    } else {
-      res.status(201).json({ message: 'Usuario agregado' });
-    }
-  });
-}
-
- 
-
-  module.exports = {
-    InsertarPersonal
-  }
+module.exports = {
+  Login
+};

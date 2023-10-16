@@ -1,13 +1,15 @@
-const mysql = require('mysql');
+const { Pool } = require('pg');
 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'Javier1234567890$',
-    database: 'cognitive-x'
+const connection = new Pool({
+  user: 'postgres',
+  host: 'localhost', // o la dirección de tu servidor PostgreSQL
+  database: 'cognitivedb',
+  password: 'root',
+  port: 5432, // El puerto predeterminado de PostgreSQL es 5432
 });
 
-connection.connect((error) => {
+
+connection.connect((error, client, done) => {
   if (error) {
     console.error('Error al conectar a la base de datos:', error);
   } else {
@@ -16,10 +18,3 @@ connection.connect((error) => {
 });
 
 module.exports = connection;
-
-/*
-  host: '127.0.0.1',
-    user: 'root',
-    password: 'Javier1234567890$',
-    database: 'ejemplo'
-    */
