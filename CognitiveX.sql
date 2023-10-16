@@ -73,3 +73,9 @@ CREATE TABLE infoMedica (
   Antecedentes varchar(255),
   Medicamentos varchar(255)
 );
+
+
+INSERT INTO usuarios (UID, Email, Password, Nombre, ApellidoP, ApellidoM, Telefono, Genero, Cargo, Especialidad)
+VALUES ('shsbjhdb', 'ejemplo@root.com', 'root', 'Juan', 'Pérez', 'Gómez', '555-123-4567', 'Masculino', 'Gerente', 'Ingeniería');
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO rs17;

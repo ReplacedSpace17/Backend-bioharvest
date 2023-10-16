@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 
 const connection = new Pool({
-  user: 'postgres',
+  user: 'rs17',
   host: 'localhost', // o la dirección de tu servidor PostgreSQL
   database: 'cognitivedb',
   password: 'root',
@@ -18,3 +18,37 @@ connection.connect((error, client, done) => {
 });
 
 module.exports = connection;
+
+
+/*
+CONECCION EN LINUX
+
+const connection = new Pool({
+  user: 'postgres',
+  host: 'localhost', // o la dirección de tu servidor PostgreSQL
+  database: 'cognitivedb',
+  password: 'root',
+  port: 5432, // El puerto predeterminado de PostgreSQL es 5432
+});
+
+CONECCION EN windows
+
+const connection = new Pool({
+  user: 'postgres',
+  host: 'localhost', // o la dirección de tu servidor PostgreSQL
+  database: 'cognitivedb',
+  password: 'root',
+  port: 5432, // El puerto predeterminado de PostgreSQL es 5432
+});
+
+ Para acceder a postgresql
+ sudo -u postgres psql
+
+ Mostrar db
+ \l
+
+ Conectarme a db
+ \c nameDB;
+ Listar tablas
+ \dt
+ */

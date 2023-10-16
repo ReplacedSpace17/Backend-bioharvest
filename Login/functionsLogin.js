@@ -3,7 +3,6 @@ const { v4: uuidv4 } = require('uuid');
 
 async function Login(req, res, data) {
   const { Email, Password } = data;
-  console.log(Email);
 
   try {
     const query = 'SELECT * FROM usuarios WHERE "email" = $1';
@@ -14,15 +13,17 @@ async function Login(req, res, data) {
       const user = rows[0];
       if (user.password === Password) {
         // Contraseña coincidente, inicio de sesión exitoso
-        console.log("Bienvenido user");
+        console.log("(200) Bienvenido "+user.email);
         res.status(200).json({ message: 'Inicio de sesión exitoso', user });
       } else {
         // Contraseña incorrecta
-        console.log("Auth fallida");
+        console.log("Contraseña incorrecta(401)");
         res.status(401).json({ error: 'Error de autenticación: contraseña incorrecta' });
       }
     } else {
       // No se encontró el usuario
+      console.log("Usuario no encontrado(404)");
+    
       res.status(404).json({ error: 'Error de autenticación: usuario no encontrado' });
     }
   } catch (error) {

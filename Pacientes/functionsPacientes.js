@@ -5,66 +5,45 @@ function generarTokenID() {
   return uuidv4();
 }
 
-function InsertarPaciente(req, res, data) {
-  // Generar token
-  const token = generarTokenID();
-
-  // Crear objetos con los datos
-  const dataPersonal = {
-    UID: token,
-    Nombre: data.Nombre,
-    ApellidoPaterno: data.ApellidoPaterno,
-    ApellidoMaterno: data.ApellidoMaterno,
-    FechaNacimiento: data.FechaNacimiento,
-    Altura: data.Altura,
-    Peso: data.Peso,
-    IMC: data.IMC
-  };
-  const dataUsuarios = {
-    UID: token,
-    Email: data.Email,
-    Password: data.Pass
-  };
-
-  // Iniciar la inserción en la tabla "Personal_information"
+function InsertarPaciente(req, res, formData) {
+  // Iniciar la inserción en la tabla "paciente"
   connection.query(
-    'INSERT INTO "personal_information" ("UID", "Nombre", "ApellidoPaterno", "ApellidoMaterno", "FechaNacimiento", "Altura", "Peso", "IMC") VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+    'INSERT INTO "paciente" ("PID", "UID", "Nombre", "ApellidoP", "ApellidoM", "Genero", "Direccion", "Telefono", "FechaIngreso", "FechaNacimiento") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
     [
-      dataPersonal.UID,
-      dataPersonal.Nombre,
-      dataPersonal.ApellidoPaterno,
-      dataPersonal.ApellidoMaterno,
-      dataPersonal.FechaNacimiento,
-      dataPersonal.Altura,
-      dataPersonal.Peso,
-      dataPersonal.IMC
-      
+      formData.UID, // Asegúrate de que formData contenga el valor de UID
+      formData.PID, // Asegúrate de que formData contenga el valor de PID
+      formData.nombre,
+      formData.apellidoPaterno,
+      formData.apellidoMaterno,
+      formData.telefono,
+      formData.sexo,
+      formData.direccion,
+      formData.fecha,
+      formData.ingreso
     ],
     (error, results) => {
       if (error) {
-        console.error('Error al realizar el INSERT en Personal_information:', error);
+        console.error('Error al realizar el INSERT en la tabla "paciente":', error);
         res.sendStatus(500);
       } else {
-        // Iniciar la inserción en la tabla "Users" después del éxito en "Personal_information"
-        connection.query(
-          'INSERT INTO "users" ("UID", "Email", "Password") VALUES ($1, $2, $3)',
-          [dataUsuarios.UID, dataUsuarios.Email, dataUsuarios.Password],
-          (error, results) => {
-            if (error) {
-              console.error('Error al realizar el INSERT en Users:', error);
-              res.sendStatus(500);
-            } else {
-              console.log('Usuario agregado a Users');
-              // Después de ambas consultas exitosas, envía la respuesta
-              res.sendStatus(201);
-            }
-          }
-        );
+        console.log("Inserción exitosa");
+        res.sendStatus(200);
       }
     }
   );
 }
 
+
+async function GetTablePacientes(req, res){
+  try {
+    const result = await connection.query('SELECT * FROM paciente');
+    res.json(result.rows); // Devuelve los datos de la tabla como un JSON
+  } catch (error) {
+    console.error('Error al obtener la tabla de pacientes:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+}
+
 module.exports = {
-  InsertarPaciente
+  InsertarPaciente, GetTablePacientes
 };
