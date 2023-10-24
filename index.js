@@ -32,47 +32,12 @@ app.post('/api/usuarios/add', async (req, res) => {
   AddNewUser(req, res, data, uid);
 });
 
-////////////////////////////////////////////////////////////////////////////////////////// ENDPOINTS PACIENTES
-// Ruta para registrar un paciente
-app.post('/api/paciente/add', async (req, res) => {
-  // Método para registrar al paciente
-  const data = req.body;
-  const uid = globalUID.getGlobalUid();
-  AgregarPaciente(req, res, data, uid);
-});
-
-// Ruta para obtener tabla de pacientes
-app.get('/api/pacientes', async (req, res) => {
-  const uid = globalUID.getGlobalUid();
-  
-  GetTablePacientes(req, res, uid); // Pasar 'uid' como un parámetro a la función
-});
-
-//eliminar pacinete
-app.delete('/api/paciente/delete/:id', async (req, res) => {
-  const id = req.params.id;
-  console.log(id);
-  // Luego, puedes utilizar el ID para eliminar al paciente, por ejemplo:
-  EliminarPaciente(req, res, id);
-});
-
-////////////////////////////////////////////////////////////////////////////////////////// ENDPOINTS login
-// Ruta para el inicio de sesión
-app.post('/api/Login', async (req, res) => {
-  // Método para el inicio de sesión
-
-  const formData = req.body;
-  const UID = await Login(req, res, formData);
-  globalUID.setGlobalUid(UID);
-  //console.log(dato);
-});
-
 
         
 
 
 // Ruta de ejemplo
-app.get('/', (req, res) => {
+app.get('/test', (req, res) => {
   res.send('¡Hola, mundo!');
   console.log("enro");
 });
