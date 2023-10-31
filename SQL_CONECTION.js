@@ -3,7 +3,7 @@ const { Pool } = require('pg');
 const connection = new Pool({
   user: 'postgres',
   host: 'localhost', // o la dirección de tu servidor PostgreSQL
-  database: 'seguritldb',
+  database: 'seguritl',
   password: 'root',
   port: 5432, // El puerto predeterminado de PostgreSQL es 5432
 });

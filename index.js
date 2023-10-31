@@ -16,23 +16,27 @@ app.use(session({
 
 ////////////////////////////////////////////////////////////////////////////////////////// IMPORTS FUNCTIONS
 const globalUID = require('./globalUID'); 
-const {AddNewUser } = require('./Usuarios/functionUsuarios');
-const { AgregarPaciente, GetTablePacientes, EliminarPaciente } = require('./Pacientes/functionsPacientes');
-const { Login, getUID } = require('./Login/functionsLogin');
+const { addAcceso, validateAccess } = require('./Public_modules/Accesos');
+
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////////// ENDPOINTS usuarios
 
-// Ruta para registrar un paciente
-app.post('/api/usuarios/add', async (req, res) => {
+// Ruta para crear un acceso
+app.post('/api/accesos/add', async (req, res) => {
   const data = req.body;
   //console.log(data);
-  const uid = globalUID.getGlobalUid();
-  AddNewUser(req, res, data, uid);
+  
+  addAcceso(req, res, data);
 });
 
-
+app.get('/api/accesos/validate', async (req, res) => {
+  const data = req.body;
+  //console.log(data);
+  
+  validateAccess(req, res, data);
+});
         
 
 

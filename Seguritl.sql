@@ -1,6 +1,19 @@
 -- Creacion de BD seguritl
 CREATE DATABASE seguritl;
 
+-- Tabla ACCESOS VALIDA
+CREATE TABLE Accesos (
+   ID SERIAL PRIMARY KEY,
+   Alias VARCHAR(255) NOT NULL,
+   Asunto VARCHAR(255),
+   FechaFinalizacion DATE,
+   Permanente BOOLEAN NOT NULL,
+   Usuario_ID VARCHAR(255),
+   QR_code VARCHAR(255)
+);
+
+
+---///// pendiente
 -- Tabla Usuarios
 CREATE TABLE Usuarios (
    ID SERIAL PRIMARY KEY,
@@ -26,15 +39,7 @@ CREATE TABLE Guardias (
    Usuario_ID INT REFERENCES Usuarios(ID)
 );
 
--- Tabla CodigosQR
-CREATE TABLE CodigosQR (
-   ID SERIAL PRIMARY KEY,
-   Alias VARCHAR(50) NOT NULL,
-   Asunto VARCHAR(255),
-   FechaFinalizacion DATE,
-   Permanente BOOLEAN NOT NULL,
-   Usuario_ID INT REFERENCES Usuarios(ID)
-);
+
 
 -- Tabla Rondines
 CREATE TABLE Rondines (
