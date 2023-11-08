@@ -16,28 +16,63 @@ app.use(session({
 
 ////////////////////////////////////////////////////////////////////////////////////////// IMPORTS FUNCTIONS
 const globalUID = require('./globalUID'); 
-const { addAcceso, validateAccess } = require('./Public_modules/Accesos');
+//const { addAcceso, validateAccess } = require('./Public_modules/Accesos');
+
+const { AddUser, EliminarUsuario, Login } = require('./Login/functionsLogin');
+const { addAcceso, getAllAccesos, deleteAccess, validateQR } = require('./Accesos/FunctionsAccesos');
+
 
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////////// ENDPOINTS usuarios
 
-// Ruta para crear un acceso
-app.post('/api/accesos/add', async (req, res) => {
+////////////////////////////////////////////////////////Login
+// ---- add user
+app.post('/api/users/add', async (req, res) => {
   const data = req.body;
-  //console.log(data);
-  
+  AddUser(req, res, data);
+});
+
+// ---- delete user
+app.delete('/api/users/delete/:id', async (req, res) => {
+  const id = req.params.id; 
+  EliminarUsuario(req, res, id);
+});
+
+// ---- delete user
+app.post('/api/users/login', async (req, res) => {
+  const data = req.body;
+  Login(req, res, data);
+});
+
+////////////////////////////////////////////////////////-->Accesos
+//add acceso
+app.post('/api/access/add', async (req, res) => {
+  const data = req.body;
   addAcceso(req, res, data);
 });
 
-app.get('/api/accesos/validate', async (req, res) => {
-  const data = req.body;
-  //console.log(data);
-  
-  validateAccess(req, res, data);
+//gets accesos
+app.get('/api/access/all', (req, res) => {
+  getAllAccesos(req, res);
 });
-        
+
+//delete acceso
+app.delete('/api/access/delete/:token', (req, res) => {
+  const token = req.params.token;
+  //console.log(token);
+  deleteAccess(req, res, token);
+});
+
+//validar QR Acceso
+app.post('/api/access/validate/:token', async (req, res) => {
+  const token = req.params.token;
+  validateQR(req, res, token);
+});
+  
+////////////////////////////////////////////////////////--> Incidencias
+
 
 
 // Ruta de ejemplo
