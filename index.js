@@ -20,7 +20,12 @@ const globalUID = require('./globalUID');
 
 const { AddUser, EliminarUsuario, Login } = require('./Login/functionsLogin');
 const { addAcceso, getAllAccesos, deleteAccess, validateQR } = require('./Accesos/FunctionsAccesos');
-
+const {
+  addIncidencia,
+  updateIncidencia,
+  deleteIncidencia,
+  getIncidencia
+} = require('./Incidencias/FunctionIncidencias');
 
 
 
@@ -73,6 +78,30 @@ app.post('/api/access/validate/:token', async (req, res) => {
   
 ////////////////////////////////////////////////////////--> Incidencias
 
+// Crear una incidencia
+app.post('/api/incidencias/create', async (req, res) => {
+  const data = req.body;
+  addIncidencia(req, res, data);
+});
+
+// Modificar una incidencia
+app.put('/api/incidencias/update/:id', async (req, res) => {
+  const data = req.body;
+  data.id = req.params.id;
+  updateIncidencia(req, res, data);
+});
+
+// Eliminar una incidencia
+app.delete('/api/incidencias/delete/:id', async (req, res) => {
+  const incidenciaId = req.params.id;
+  deleteIncidencia(req, res, incidenciaId);
+});
+
+// Ver una incidencia
+app.get('/api/incidencias/:id', async (req, res) => {
+  const incidenciaId = req.params.id;
+  getIncidencia(req, res, incidenciaId);
+});
 
 
 // Ruta de ejemplo

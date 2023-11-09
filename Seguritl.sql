@@ -60,3 +60,12 @@ CREATE TABLE ReportesIncidencias (
    DescripcionDetallada TEXT,
    Guardia_ID INT REFERENCES Guardias(ID)
 );
+
+
+
+
+-- Insertar dos filas de ejemplo en la tabla Accesos
+INSERT INTO Accesos (Alias, Asunto, FechaFinalizacion, Permanente, Usuario_ID, QR_code)
+VALUES
+    ('Acceso Ejemplo 1', 'Reunión de la mañana', '2023-11-15', false, 'Usuario1', 'QR123456'),
+    ('Acceso Ejemplo 2', 'Evento de tarde', '2023-11-15', true, 'Usuario2', 'QR789012');
