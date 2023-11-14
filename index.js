@@ -24,7 +24,8 @@ const {
   addIncidencia,
   updateIncidencia,
   deleteIncidencia,
-  getIncidencia
+  getIncidencia, 
+  getAllIncidencia
 } = require('./Incidencias/FunctionIncidencias');
 
 
@@ -73,6 +74,7 @@ app.delete('/api/access/delete/:token', (req, res) => {
 //validar QR Acceso
 app.post('/api/access/validate/:token', async (req, res) => {
   const token = req.params.token;
+  console.log('Validando: ' +token);
   validateQR(req, res, token);
 });
   
@@ -103,6 +105,10 @@ app.get('/api/incidencias/:id', async (req, res) => {
   getIncidencia(req, res, incidenciaId);
 });
 
+// Ver una incidencia
+app.get('/api/incidencias', async (req, res) => {
+  getAllIncidencia(req, res);
+});
 
 // Ruta de ejemplo
 app.get('/test', (req, res) => {

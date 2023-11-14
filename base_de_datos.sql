@@ -39,7 +39,34 @@ CREATE TABLE "rondines" (
 
 
 
-INSERT INTO accesos (token, alias, asunto, expiracion, permanente, user_id, status)
-VALUES
-    ('QR123456', 'Alias1', 'Asunto1', '2023-12-31', true, 'User1', 'Activo'),
-    ('QR789012', 'Alias2', 'Asunto2', '2023-11-30', false, 'User2', 'Activo');
+/*////////////////////////////////////       SEED     */ 
+
+
+-- Registro de usuario
+INSERT INTO usuarios ("id", "tipo", "email", "password")
+VALUES ('1', 'Guardia', 'guardia2@itleon.com', 'admin');
+
+
+
+
+-- Registro 1
+INSERT INTO accesos ("token", "alias", "asunto", "expiracion", "permanente", "user_id", "status")
+VALUES ('token1', 'Alias1', 'Asunto1', '2023-12-01', true, 'admin', 'Active');
+
+-- Registro 2 (expirado)
+INSERT INTO accesos ("token", "alias", "asunto", "expiracion", "permanente", "user_id", "status")
+VALUES ('token2', 'Alias2', 'Asunto2', '2022-01-01', false, 'admin', 'Active');
+
+-- Registro 3 (con fecha futura)
+INSERT INTO accesos ("token", "alias", "asunto", "expiracion", "permanente", "user_id", "status")
+VALUES ('token3', 'Alias3', 'Asunto3', '2024-01-01', false, 'admin', 'Active');
+
+/* incidencias
+{
+    "tipo": "Ejemplo",
+    "subtipo": "dsad",
+    "comentario": "dsdaad",
+    "foto": "dsads.jpgd",
+    "user_id": "dawdwadwadwadawd"
+}
+*/

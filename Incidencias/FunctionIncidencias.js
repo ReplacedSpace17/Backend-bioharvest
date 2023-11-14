@@ -74,10 +74,24 @@ async function addIncidencia(req, res, data) {
     }
   }
   
+  async function getAllIncidencia(req, res) {
+    const script = 'SELECT * FROM incidencias';
+    try {
+      const result = await connection.query(script);
+      if (result.rows.length > 0) {
+        res.status(200).json(result.rows);
+      } else {
+        res.status(404).json({ error: 'Incidencia no encontrada' });
+      }
+    } catch (error) {
+      console.error('Error al obtener la incidencia', error);
+      res.status(500).json({ error: 'Error de servidor' });
+    }
+  }
 module.exports = {
     addIncidencia,
     updateIncidencia,
     deleteIncidencia,
-    getIncidencia
+    getIncidencia, getAllIncidencia
 
 }
