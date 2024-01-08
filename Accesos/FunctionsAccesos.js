@@ -32,6 +32,33 @@ async function addAcceso(req, res, data){
     }
 }
 
+
+async function updateAccess(req, res, token, newData) {
+    const script = 'UPDATE accesos SET "alias" = $1, "asunto" = $2, "expiracion" = $3, "permanente" = $4 WHERE "token" = $5';
+
+    try {
+        const result = await connection.query(script, [
+            newData.alias,
+            newData.asunto,
+            newData.expiracion,
+            newData.permanente,
+            token
+        ]);
+
+        if (result.rowCount === 0) {
+            // Token no encontrado
+            res.status(404).json({ error: 'Token no encontrado' });
+            return;
+        }
+
+        console.log('Acceso modificado correctamente: ' + token);
+        res.status(200).json({ Mensaje: 'Acceso modificado correctamente' });
+    } catch (error) {
+        console.error('Error al modificar el acceso', error);
+        res.status(500).json({ error: 'Error de servidor' });
+    }
+}
+
 //Function para crear accesos
 async function getAllAccesos(req, res, id){
     const script = 'SELECT * FROM accesos';
@@ -115,5 +142,6 @@ module.exports = {
     addAcceso,
     getAllAccesos,
     deleteAccess,
-    validateQR
+    validateQR,
+    updateAccess
 }

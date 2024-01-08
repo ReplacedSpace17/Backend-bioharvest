@@ -16,7 +16,7 @@ CREATE TABLE "accesos" (
   "expiracion" date,
   "permanente" boolean,
   "user_id" VARCHAR(255),
-  "status" VARCHAR(255),
+  "status" VARCHAR(255)
 );
 
 --PENDIENTE HACER SU CRUD
@@ -33,10 +33,28 @@ CREATE TABLE "incidencias" (
 CREATE TABLE "rondines" (
   "id" VARCHAR(255) PRIMARY KEY,
   "user_id" VARCHAR(255), 
-  "timpo" int,
+  "tiempo" int,
   "fecha" date
 );
 
+CREATE TABLE "expedientes" (
+  "id" VARCHAR(255) PRIMARY KEY,
+  "user_id" VARCHAR(255),
+  "nombre" VARCHAR(255),
+  "apellidop" VARCHAR(255),
+  "apellidom" VARCHAR(255),
+  "curp" VARCHAR(255),
+  "sexo" VARCHAR(255),
+  "foto_url" VARCHAR(255),
+  "fotocredencial_url" VARCHAR(255),
+  "turno" VARCHAR(255)
+);
+
+CREATE TABLE chat (
+  "id" SERIAL PRIMARY KEY,
+  "mensaje" text,
+  "user_id" VARCHAR(255),
+);
 
 
 /*////////////////////////////////////       SEED     */ 
