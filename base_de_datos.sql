@@ -56,6 +56,22 @@ CREATE TABLE chat (
   "user_id" VARCHAR(255),
 );
 
+CREATE TABLE detallesRondines (
+  "id" SERIAL PRIMARY KEY,
+  "id_rondin" VARCHAR(255),
+  "user_id" VARCHAR(255),
+  "fecha" date,
+  "point1" time,
+  "point2" time,
+  "point3" time,
+  "point4" time,
+  "point5" time,
+  "point6" time,
+  "point7" time,
+  "point8" time,
+  "point9" time,
+  "point10" time,
+);
 
 /*////////////////////////////////////       SEED     */ 
 
