@@ -8,7 +8,7 @@ function generarTokenID() {
 
 
 async function addIncidencia(req, res, data) {
-    const script = 'INSERT INTO incidencias (id, tipo, subtipo, comentario, foto, user_id) VALUES ($1, $2, $3, $4, $5, $6)';
+    const script = 'INSERT INTO incidencias (id, tipo, subtipo, comentario, foto, user_id, fecha) VALUES ($1, $2, $3, $4, $5, $6, $7)';
     const ID = generarTokenID();
     try {
       const result = await connection.query(script, [
@@ -18,6 +18,7 @@ async function addIncidencia(req, res, data) {
         data.comentario,
         data.foto,
         data.user_id,
+        data.fecha
       ]);
       console.log("Incidencia nueva (201) -> " + data.tipo);
       res.status(201).json({ message: 'Incidencia creada exitosamente' });

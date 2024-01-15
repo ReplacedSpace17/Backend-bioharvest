@@ -36,13 +36,13 @@ const {
   getAllIncidencia
 } = require('./Incidencias/FunctionIncidencias');
 
-const { addRondin, deleteRondin, getAllRondines } = require('./Rondines/FunctionRondines');
+const { addRondin, deleteRondin, getAllRondines, addDetallesRondin, getAllDetallesRondines, getDetalleID, GetMostRegisteredIncidentTypes } = require('./Rondines/FunctionRondines');
 
 const {AddExpediente,
   GetExpedienteById,
   DeleteExpedienteById,
   UpdateExpedienteById,
-  GetAllExpedientes, getInfoEdit }= require('./Expedientes/functionsExpedientes');
+  GetAllExpedientes, getInfoEdit, EditExpediente, EditExpedienteFOTO }= require('./Expedientes/functionsExpedientes');
 
 
 //config almacenamiento fotos de incidencias
@@ -179,7 +179,10 @@ app.post('/api/incidencias/create', async (req, res) => {
 });
 
 
-
+// Obtener tlos mas registrados
+app.get('/api/incident/most', async (req, res) => {
+  GetMostRegisteredIncidentTypes(req, res);
+});
 
 // Modificar una incidencia
 app.put('/api/incidencias/update/:id', async (req, res) => {
@@ -211,6 +214,24 @@ app.post('/api/rondines/create', async (req, res) => {
   const data = req.body;
   addRondin(req, res, data);
 });
+
+// Agregar detalles de rondin
+app.post('/api/rondines/details/add', async (req, res) => {
+  const data = req.body;
+  addDetallesRondin(req, res, data);
+});
+
+// Obtener todos los rondines
+app.get('/api/rondines/details', async (req, res) => {
+  getAllDetallesRondines(req, res);
+});
+
+// Obtener todos los rondines
+app.get('/api/rondines/details/:id', async (req, res) => {
+  const id = req.params.id;
+  getDetalleID(req, res, id);
+});
+
 
 // Eliminar un rondin
 app.delete('/api/rondines/delete/:id', async (req, res) => {
@@ -263,6 +284,52 @@ app.post('/api/users/expediente/add', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 
+
+});
+
+
+app.put('/api/users/expediente/modify', async (req, res) => {
+
+  try {
+    const data = req.body;
+    //obtener la foto url
+    const fotoURL64 = data.foto_url;
+    const credencial64 = data.fotocredencial_url;
+    
+    //almacenar fotos
+    if (fotoURL64) {
+      // Decodificar la imagen base64 y guardarla en el sistema de archivos
+      const imageBuffer = Buffer.from(fotoURL64, 'base64');
+      const imageName = Date.now() + '-photo.jpg'; // Nombre de archivo único
+      const imagePath = 'uploads/Expediente/Fotos/' + imageName; // Ruta completa del archivo
+      fs.writeFileSync(imagePath, imageBuffer);
+      data.foto_url = imagePath; // Actualizar el campo 'foto' con la ruta al archivo guardado
+      console.log('Foto guardada en ' + imagePath);
+    }
+
+    //almacenar credenciales
+    if (credencial64) {
+      // Decodificar la imagen base64 y guardarla en el sistema de archivos
+      const imageBuffer = Buffer.from(credencial64, 'base64');
+      const imageName = Date.now() + '-photo.jpg'; // Nombre de archivo único
+      const imagePath = 'uploads/Expediente/Credenciales/' + imageName; // Ruta completa del archivo
+      fs.writeFileSync(imagePath, imageBuffer);
+      data.fotocredencial_url = imagePath; // Actualizar el campo 'foto' con la ruta al archivo guardado
+      console.log('Credencial guardada en ' + imagePath);
+    }
+
+    await EditExpedienteFOTO(req, res, data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+
+});
+
+app.put('/api/users/expediente/edit', async (req, res) => {
+  const data = req.body;
+  EditExpediente(req, res, data);
 
 });
 

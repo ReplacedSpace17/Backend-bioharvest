@@ -39,6 +39,87 @@ async function AddExpediente(req, res, data) {
   }
 }
 
+async function EditExpediente(req, res, data) {
+  const script = `
+    UPDATE expedientes
+    SET
+      nombre = $1,
+      apellidop = $2,
+      apellidom = $3,
+      curp = $4,
+      sexo = $5,
+      turno = $6
+    WHERE user_id = $7
+  `;
+
+  try {
+    const result = await connection.query(script,
+      [
+        data.nombre,
+        data.apellidop,
+        data.apellidom,
+        data.curp,
+        data.sexo,
+        data.turno,
+        data.user_id  // El ID del expediente que deseas editar
+      ]);
+
+    if (result.rowCount === 1) {
+      console.log('Expediente editado con éxito');
+      res.status(200).json({ message: 'Expediente editado con éxito' });
+    } else {
+      console.error('No se encontró el expediente con el ID proporcionado');
+      res.status(404).json({ error: 'Expediente no encontrado' });
+    }
+  } catch (error) {
+    console.error('Error al editar el expediente:', error);
+    res.status(500).json({ error: 'Error de servidor' });
+  }
+}
+
+async function EditExpedienteFOTO(req, res, data) {
+  const script = `
+    UPDATE expedientes
+    SET
+      nombre = $1,
+      apellidop = $2,
+      apellidom = $3,
+      curp = $4,
+      sexo = $5,
+      turno = $6,
+      fotocredencial_url = $7
+      foto_url = $8
+    WHERE user_id = $7
+  `;
+
+  try {
+    const result = await connection.query(script,
+      [
+        data.nombre,
+        data.apellidop,
+        data.apellidom,
+        data.curp,
+        data.sexo,
+        data.turno,
+        data.fotocredencial_url,
+        data.foto_url,
+        data.user_id  // El ID del expediente que deseas editar
+      ]);
+
+    if (result.rowCount === 1) {
+      console.log('Expediente editado con éxito');
+      res.status(200).json({ message: 'Expediente editado con éxito' });
+    } else {
+      console.error('No se encontró el expediente con el ID proporcionado');
+      res.status(404).json({ error: 'Expediente no encontrado' });
+    }
+  } catch (error) {
+    console.error('Error al editar el expediente:', error);
+    res.status(500).json({ error: 'Error de servidor' });
+  }
+}
+
+
 async function GetExpedienteById(req, res, id) {
   const script = 'SELECT * FROM expedientes WHERE user_id = $1';
   try {
@@ -151,6 +232,7 @@ module.exports = {
   DeleteExpedienteById,
   UpdateExpedienteById,
   GetAllExpedientes,
-  getInfoEdit
+  getInfoEdit,
+  EditExpediente, EditExpedienteFOTO
 };
 

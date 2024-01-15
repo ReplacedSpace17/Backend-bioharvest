@@ -26,7 +26,8 @@ CREATE TABLE "incidencias" (
   "subtipo" VARCHAR(255),
   "comentario" VARCHAR(255),
   "foto" VARCHAR(255),
-  "user_id" VARCHAR(255)
+  "user_id" VARCHAR(255),
+  "fecha" date
 );
 
 --pendiente de crear
