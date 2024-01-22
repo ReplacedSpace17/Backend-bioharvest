@@ -18,11 +18,11 @@ async function checkEmailExists(req, res) {
 
     if (result.rows.length > 0) {
       // El correo electrónico existe en la base de datos
-      console.log("El correo existe");
+      //console.log("El correo existe");
       res.status(200).json({ exists: true });
     } else {
       // El correo electrónico no existe en la base de datos
-      console.log("El correo no existe");
+      //console.log("El correo no existe");
       res.status(200).json({ exists: false });
     }
   } catch (error) {
@@ -76,7 +76,7 @@ async function updatePersonalInfo(req, res, nacimiento, avatar, uid) {
 
   try {
     await connection.query(updatePersonalInfoScript, [avatar, nacimiento, uid]);
-    console.log("Cuenta completada");
+    //console.log("Cuenta completada");
     res.status(200).json({ message: 'Información personal actualizada correctamente', uid: uid });
   } catch (error) {
     console.error('Error al actualizar información personal', error);

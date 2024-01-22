@@ -25,7 +25,7 @@ app.use(session({
 const { checkEmailExists, addUser, activateUser, updatePersonalInfo } = require('./CrearCuenta/functionAccountNew');
 
 let codigoInfo = {};
-
+let time;
 //-------------------------------------------------------------> Cuenta
 app.post('/api/validate-email/:email', (req, res) => {
   const { email } = req.params;
@@ -37,7 +37,7 @@ app.post('/api/validate-email/:email', (req, res) => {
 app.post('/api/user', (req, res) => {
 const data = req.body;
 addUser(req, res, data);
-console.log("Agregando usuario");
+//console.log("Agregando usuario");
 });
 
 //enviar codigo
@@ -46,7 +46,7 @@ app.post('/api/validate-code/:email', (req, res) => {
   // Llamada a la función enviarCode con la asignación de la variable global
   enviarCode(email).then((info) => {
     codigoInfo = info;
-    console.log('Código generado:', info);
+//    //console.log('Código generado:', info);
   }).catch((error) => {
     console.error('Error al enviar el código:', error);
     // Puedes manejar el error según tus necesidades
@@ -56,16 +56,18 @@ app.post('/api/validate-code/:email', (req, res) => {
 app.post('/api/activate-user/:email', (req, res) => {
   const { email } = req.params;
   const { code } = req.body;
+  
 
 
   if (Number(code) === Number(codigoInfo.code)) {
-    console.log("Codigo correcto");
+    //console.log("Codigo correcto");
     activateUser(req, res, email);
+    console.log("Nueva cuenta activada 🚀 \n Email: "+email);
+    res.status(200);
   } else {
-    console.log("Codigo incorrecto");
+    //console.log("Codigo incorrecto");
+    res.status(201);
   }
-  
-  
 });
 
 // actualizar fecha de nacimiento
@@ -137,7 +139,7 @@ async function enviarCode(email) {
     const info = await transporter.sendMail(mailOptions);
 
     // Puedes realizar acciones adicionales aquí, como guardar el código y la marca de tiempo en la base de datos asociado a la UID, etc.
-    console.log('Código enviado con éxito. Detalles:', info);
+    //console.log('Código enviado con éxito. Detalles:', info);
 
     // Devolver el código generado y la marca de tiempo
     return { code, timestamp };
@@ -150,7 +152,7 @@ async function enviarCode(email) {
 
 async function sendCODE(email) {
   enviarCode(email).then((code) => {
-    console.log('Código generado:', code);
+    //console.log('Código generado:', code);
   }).catch((error) => {
     console.error('Error:', error);
   });
@@ -159,11 +161,11 @@ async function sendCODE(email) {
 // Ruta de ejemplo
 app.get('/test', (req, res) => {
   res.send('¡Hola, mundo!');
-  console.log("Test");
+  //console.log("Test");
 });
 
 // Inicia el servidor
 app.listen(port, () => {
-  console.log(`Servidor corriendo en http://localhost:${port}`);
+  //console.log(`Servidor corriendo en http://localhost:${port}`);
 
 });
