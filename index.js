@@ -23,6 +23,7 @@ app.use(session({
 
 // configuracion de funciones
 const { checkEmailExists, addUser, activateUser, updatePersonalInfo } = require('./CrearCuenta/functionAccountNew');
+const {Login} = require('./Login/functionsLogin');
 
 let codigoInfo = {};
 let time;
@@ -81,6 +82,22 @@ app.post('/api/final-new-user/:uid', (req, res) => {
   
 });
 
+////////////////////////////////////////////////////////-----------------> Login
+
+app.post('/api/login/', async (req, res) => {
+  const formData = req.body;
+  console.log("Form data: " + formData.Email);
+
+  const loginResult = await Login(formData);
+
+  if (loginResult.success) {
+    console.log("Si ");
+    res.status(200).json(loginResult);
+  } else {
+    console.log("No ");
+    res.status(401).json(loginResult);
+  }
+});
 
 ////////////////////////////////////////////////////////-----------------> Incidencias
 // Crear una incidencia
