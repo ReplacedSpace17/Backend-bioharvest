@@ -9,30 +9,42 @@ function generarTokenID() {
 
 const saltRounds = 10; // Número de rondas de sal para bcrypt, ajusta según sea necesario
 
-// Función para validar si existen las credenciales de acceso en la base de datos
 async function Login(data) {
   console.log("Email function: "+ data.Email);
   console.log("pass function: "+ data.Password);
-  // Hashing de la contraseña para comparación segura
-  const hashedPassword = hashFunction(data.Password);
-  console.log("Hashed password: " + hashedPassword);
 
-  const script = 'SELECT * FROM users WHERE email = $1 AND password = $2';
+  const script = 'SELECT * FROM users WHERE email = $1';
   try {
-    const result = await connection.query(script, [data.Email, hashedPassword]);
+    const result = await connection.query(script, [data.Email]);
 
     if (result.rows.length > 0) {
-      // Las credenciales son válidas
-      return { success: true, message: 'Autenticación exitosa' };
+      const storedHashedPassword = result.rows[0].password;
+      // Comparar el hash almacenado con la contraseña ingresada
+      const isPasswordMatch = await comparePasswords(data.Password, storedHashedPassword);
+
+      if (isPasswordMatch) {
+        // Las credenciales son válidas
+        return { success: true, message: 'Autenticación exitosa' };
+      } else {
+        // Las credenciales no son válidas
+        return { success: false, message: 'Credenciales incorrectas' };
+      }
     } else {
-      // Las credenciales no son válidas
-      return { success: false, message: 'Credenciales incorrectas' };
+      // El usuario no fue encontrado en la base de datos
+      return { success: false, message: 'Usuario no encontrado' };
     }
   } catch (error) {
     console.error('Error al buscar las credenciales de acceso', error);
     return { success: false, error: 'Error de servidor' };
   }
 }
+
+// Función para comparar contraseñas utilizando bcrypt
+async function comparePasswords(plainPassword, hashedPassword) {
+  const bcrypt = require('bcrypt');
+  return await bcrypt.compare(plainPassword, hashedPassword);
+}
+
 
 
 // Función de hash para la contraseña (debes implementar la función hash real)

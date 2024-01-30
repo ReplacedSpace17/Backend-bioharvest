@@ -35,9 +35,10 @@ async function checkEmailExists(req, res) {
 // Función para agregar un nuevo usuario
 async function addUser(req, res, data) {
   uid = generarID();
+  const hashedPassword = hashFunction(data.Contrasena);
   const addUserScript = 'INSERT INTO users (uid, email, password, activate) VALUES ($1, $2, $3, $4)';
   try {
-    await connection.query(addUserScript, [uid, data.Correo, data.Contrasena, false]);
+    await connection.query(addUserScript, [uid, data.Correo, hashedPassword, false]);
     
     
   } catch (error) {
@@ -89,8 +90,23 @@ async function updatePersonalInfo(req, res, nacimiento, avatar, uid) {
 
 
 
+const saltRounds = 10; // Número de rondas de sal para bcrypt, ajusta según sea necesario
 
 
+// Función de hash para la contraseña (debes implementar la función hash real)
+function hashFunction(password) {
+  // Implementar la función de hash adecuada (por ejemplo, bcrypt)
+  // Retorna la contraseña hasheada
+  // Ejemplo ficticio:
+  return hash(password, saltRounds);
+}
+
+// Ejemplo ficticio de función de hash con bcrypt (debes instalar el paquete bcrypt)
+function hash(password, saltRounds) {
+  const bcrypt = require('bcrypt');
+  const salt = bcrypt.genSaltSync(saltRounds);
+  return bcrypt.hashSync(password, salt);
+}
 
 
 
