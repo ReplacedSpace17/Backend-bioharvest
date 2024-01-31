@@ -13,6 +13,7 @@ app.use(cors()); // Habilita el middleware CORS
 app.use(express.json());
 const session = require('express-session');
 const multer = require('multer');
+// Importa la librería jsonwebtoken
 
 // Configura express-session
 app.use(session({
@@ -27,6 +28,8 @@ const {Login} = require('./Login/functionsLogin');
 
 let codigoInfo = {};
 let time;
+
+
 //-------------------------------------------------------------> Cuenta
 app.post('/api/validate-email/:email', (req, res) => {
   const { email } = req.params;
@@ -86,18 +89,18 @@ app.post('/api/final-new-user/:uid', (req, res) => {
 
 app.post('/api/login/', async (req, res) => {
   const formData = req.body;
-  console.log("Form data: " + formData.Email);
-
+  //console.log("Form data: " + formData.Email);
   const loginResult = await Login(formData);
-
   if (loginResult.success) {
-    console.log("Si ");
+    console.log("Autenticación exitosa ");
     res.status(200).json(loginResult);
   } else {
-    console.log("No ");
+    console.log("Credenciales incorrectas");
     res.status(401).json(loginResult);
   }
 });
+
+
 
 ////////////////////////////////////////////////////////-----------------> Incidencias
 // Crear una incidencia

@@ -1,30 +1,29 @@
 const connection = require('../SQL_CONECTION');
 const { v4: uuidv4 } = require('uuid');
+const jwt = require('jsonwebtoken');
 
-
-function generarTokenID() {
-  return uuidv4();
-}
 
 
 const saltRounds = 10; // Número de rondas de sal para bcrypt, ajusta según sea necesario
 
 async function Login(data) {
-  console.log("Email function: "+ data.Email);
-  console.log("pass function: "+ data.Password);
-
+  //console.log("Email function: "+ data.Email);
+  //console.log("pass function: "+ data.Password);
   const script = 'SELECT * FROM users WHERE email = $1';
   try {
     const result = await connection.query(script, [data.Email]);
 
     if (result.rows.length > 0) {
       const storedHashedPassword = result.rows[0].password;
+      const uid = result.rows[0].uid;
       // Comparar el hash almacenado con la contraseña ingresada
       const isPasswordMatch = await comparePasswords(data.Password, storedHashedPassword);
-
       if (isPasswordMatch) {
         // Las credenciales son válidas
-        return { success: true, message: 'Autenticación exitosa' };
+        // Generar el token JWT
+        const token = jwt.sign({ uid }, 'bioharvest', { expiresIn: '1h' }); // Token expira en 1 hora
+
+        return { success: true, token , email: data.Email};
       } else {
         // Las credenciales no son válidas
         return { success: false, message: 'Credenciales incorrectas' };
