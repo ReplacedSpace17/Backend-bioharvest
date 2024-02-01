@@ -7,9 +7,26 @@ const jwt = require('jsonwebtoken');
 const saltRounds = 10; // Número de rondas de sal para bcrypt, ajusta según sea necesario
 
 async function Login(data) {
-  //console.log("Email function: "+ data.Email);
-  //console.log("pass function: "+ data.Password);
-  const script = 'SELECT * FROM users WHERE email = $1';
+  const script = `
+    SELECT 
+      u.uid,
+      u.email,
+      u.password,
+      u.activate,
+      p.nombre,
+      p.apellidop,
+      p.apellidom,
+      p.avatar
+    FROM 
+      users u
+    INNER JOIN 
+      personal_information p
+    ON 
+      u.uid = p.uid
+    WHERE 
+      u.email = $1
+  `;
+
   try {
     const result = await connection.query(script, [data.Email]);
 
@@ -23,7 +40,16 @@ async function Login(data) {
         // Generar el token JWT
         const token = jwt.sign({ uid }, 'bioharvest', { expiresIn: '1h' }); // Token expira en 1 hora
 
-        return { success: true, token , email: data.Email};
+        //construir el nombre y apellido paterno
+        const nombreData = result.rows[0].nombre + ' ' + result.rows[0].apellidop;
+
+        return { 
+          success: true, 
+          token, 
+          email: data.Email, 
+          nombre: nombreData,
+          avatar: result.rows[0].avatar
+        };
       } else {
         // Las credenciales no son válidas
         return { success: false, message: 'Credenciales incorrectas' };
@@ -37,6 +63,7 @@ async function Login(data) {
     return { success: false, error: 'Error de servidor' };
   }
 }
+
 
 // Función para comparar contraseñas utilizando bcrypt
 async function comparePasswords(plainPassword, hashedPassword) {
