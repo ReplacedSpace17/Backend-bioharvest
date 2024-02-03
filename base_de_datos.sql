@@ -17,3 +17,20 @@ CREATE TABLE personal_information (
   avatar VARCHAR,
   nacimiento DATE
 );
+
+--Crear la tabla "cepas"
+CREATE TABLE cepas (
+  id VARCHAR PRIMARY KEY,
+  uid VARCHAR,
+  nombre VARCHAR,
+  origen VARCHAR,
+  medio VARCHAR
+);
+
+--Crear la tabla "cultivos"
+CREATE TABLE cultivos (
+  id VARCHAR PRIMARY KEY,
+  nombre VARCHAR,
+  cepaid VARCHAR,
+  motivo VARCHAR
+);
