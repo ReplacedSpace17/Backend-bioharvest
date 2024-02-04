@@ -25,6 +25,7 @@ app.use(session({
 // configuracion de funciones
 const { checkEmailExists, addUser, activateUser, updatePersonalInfo } = require('./CrearCuenta/functionAccountNew');
 const {Login} = require('./Login/functionsLogin');
+const {addCepa, editCepa, deleteCepa, getCepa, getAllCepas} = require('./CepasYCultivos/FunctionsCepas');
 
 let codigoInfo = {};
 let time;
@@ -101,6 +102,25 @@ app.post('/api/login/', async (req, res) => {
 });
 
 
+////////////////////////////////////////////////////////-----------------> Cepas
+
+app.post('/api/cepas/', async (req, res) => {
+  const formData = req.body;
+  //console.log("Form data: " + formData.Email);
+  addCepa(req, res, formData);
+});
+
+app.put('/api/cepas/:id', async (req, res) => {
+  const id = req.params.id;
+  const formData = req.body;
+  addCepa(req, res, formData, id);
+});
+
+app.get('/api/cepas/', async (req, res) => {
+  const formData = req.body;
+  //console.log("Form data: " + formData.Email);
+  getAllCepas(req, res);
+});
 
 ////////////////////////////////////////////////////////-----------------> Incidencias
 // Crear una incidencia

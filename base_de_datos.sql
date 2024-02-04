@@ -16,21 +16,25 @@ CREATE TABLE personal_information (
   apellidom VARCHAR,
   avatar VARCHAR,
   nacimiento DATE
+  FOREIGN KEY (uid) REFERENCES users(uid)
 );
 
---Crear la tabla "cepas"
+
 CREATE TABLE cepas (
   id VARCHAR PRIMARY KEY,
-  uid VARCHAR,
+  user_id VARCHAR,
   nombre VARCHAR,
   origen VARCHAR,
-  medio VARCHAR
+  medio VARCHAR,
+  FOREIGN KEY (user_id) REFERENCES users(uid)
 );
 
 --Crear la tabla "cultivos"
 CREATE TABLE cultivos (
   id VARCHAR PRIMARY KEY,
   nombre VARCHAR,
-  cepaid VARCHAR,
-  motivo VARCHAR
+  cepa_id VARCHAR,
+  motivo VARCHAR,
+  FOREIGN KEY (cepa_id) REFERENCES cepas(id)
 );
+
