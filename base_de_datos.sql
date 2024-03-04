@@ -32,6 +32,7 @@ CREATE TABLE cepas (
 --Crear la tabla "cultivos"
 CREATE TABLE cultivos (
   id VARCHAR PRIMARY KEY,
+  user_id VARCHAR,
   nombre VARCHAR,
   cepa_id VARCHAR,
   motivo VARCHAR,

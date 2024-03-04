@@ -26,6 +26,7 @@ app.use(session({
 const { checkEmailExists, addUser, activateUser, updatePersonalInfo } = require('./CrearCuenta/functionAccountNew');
 const {Login} = require('./Login/functionsLogin');
 const {addCepa, editCepa, deleteCepa, getCepa, getAllCepas} = require('./CepasYCultivos/FunctionsCepas');
+const {addCultivo, editCultivo, deleteCultivo, getCultivo, getAllCultivos} = require('./CepasYCultivos/FunctionsCultivos');
 
 let codigoInfo = {};
 let time;
@@ -113,13 +114,47 @@ app.post('/api/cepas/', async (req, res) => {
 app.put('/api/cepas/:id', async (req, res) => {
   const id = req.params.id;
   const formData = req.body;
-  addCepa(req, res, formData, id);
+  editCepa(req, res, formData, id);
 });
 
-app.get('/api/cepas/', async (req, res) => {
+app.get('/api/cepas/user/:id', async (req, res) => {
+  const id = req.params.id;
+  //console.log("Form data: " + formData.Email);
+  getAllCepas(req, res, id);
+});
+
+//delete
+app.delete('/api/cepas/:id', async (req, res) => {
+  const id = req.params.id;
+  console.log("Eliminando cepa: " + id);
+  deleteCepa(req, res, id);
+});
+
+////////////////////////////////////////////////////////-----------------> Cultivos
+// Crear un cultivo
+app.post('/api/cultivos/', async (req, res) => {
   const formData = req.body;
   //console.log("Form data: " + formData.Email);
-  getAllCepas(req, res);
+  addCultivo(req, res, formData);
+});
+
+app.put('/api/cultivos/:id', async (req, res) => {
+  const id = req.params.id;
+  const formData = req.body;
+  editCultivo(req, res, formData, id);
+});
+
+app.get('/api/cultivos/user/:id', async (req, res) => {
+  const id = req.params.id;
+  //console.log("Form data: " + formData.Email);
+  getAllCultivos(req, res, id);
+});
+
+//delete
+app.delete('/api/cultivos/:id', async (req, res) => {
+  const id = req.params.id;
+  console.log("Eliminando cepa: " + id);
+  deleteCultivo(req, res, id);
 });
 
 ////////////////////////////////////////////////////////-----------------> Incidencias

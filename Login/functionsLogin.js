@@ -48,7 +48,8 @@ async function Login(data) {
           token, 
           email: data.Email, 
           nombre: nombreData,
-          avatar: result.rows[0].avatar
+          avatar: result.rows[0].avatar,
+          uid: result.rows[0].uid
         };
       } else {
         // Las credenciales no son válidas

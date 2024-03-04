@@ -14,6 +14,7 @@ async function addCepa(req, res, data) {
     try {
         // Ejecutar la consulta para agregar la cepa a la tabla "cepas"
         await connection.query(addCepaScript, [cepa_id, user_id, nombre, origen, medio]);
+        console.log('Cepa agregada correctamente');
         res.status(201).json({ message: 'Cepa agregada correctamente', cepa_id: cepa_id });
     } catch (error) {
         console.error('Error al agregar la cepa', error);
@@ -29,6 +30,7 @@ async function editCepa(req, res, data, id) {
     try {
         // Ejecutar la consulta para editar la cepa en la tabla "cepas"
         await connection.query(editCepaScript, [nombre, origen, medio, id]);
+        console.log('Cepa editada correctamente');
         res.status(200).json({ message: 'Cepa editada correctamente', cepa_id: id });
     } catch (error) {
         console.error('Error al editar la cepa', error);
@@ -58,6 +60,7 @@ async function getCepa(req, res, cepa_id) {
         // Ejecutar la consulta para obtener información de la cepa de la tabla "cepas"
         const result = await connection.query(getCepaScript, [cepa_id]);
         if (result.rows.length > 0) {
+            //
             res.status(200).json(result.rows[0]); // Devolver la información de la cepa encontrada
         } else {
             res.status(404).json({ error: 'Cepa no encontrada' });
@@ -76,6 +79,8 @@ async function getAllCepas(req, res, user_id) {
         // Ejecutar la consulta para obtener todas las cepas de la tabla "cepas"
         const result = await connection.query(getAllCepasScript, [user_id]);
         if (result.rows.length > 0) {
+            //como regreso el json pero tambien en cada registro un autoincremental llamado NumCepa
+            
             res.status(200).json(result.rows); // Devolver todas las cepas encontradas
         } else {
             res.status(404).json({ message: 'No se encontraron cepas en la base de datos' });

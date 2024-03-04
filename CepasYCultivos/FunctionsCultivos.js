@@ -8,12 +8,13 @@ function generarID() {
 // Función para agregar una nueva cepa
 async function addCultivo(req, res, data) {
     const cultivo_id = generarID(); // Generar un nuevo ID para la cepa
-    const { cepa_id, nombre, motivo } = data; // Obtener los datos de la cepa desde la solicitud
-    const addCultivoScript = 'INSERT INTO cultivos (id, nombre, cepa_id, motivo) VALUES ($1, $2, $3, $4)';
+    const { cepa_id, user_id, nombre, motivo } = data; // Obtener los datos de la cepa desde la solicitud
+    const addCultivoScript = 'INSERT INTO cultivos (id, user_id, nombre, cepa_id, motivo) VALUES ($1, $2, $3, $4, $5)';
     
     try {
         // Ejecutar la consulta para agregar la cepa a la tabla "cepas"
-        await connection.query(addCultivoScript, [cultivo_id, nombre, cepa_id, motivo]);
+        await connection.query(addCultivoScript, [cultivo_id, user_id, nombre, cepa_id, motivo]);
+        console.log('Cultivo creado correctamente');
         res.status(201).json({ message: 'Cultivo creado correctamente', cultivo_id: cultivo_id });
     } catch (error) {
         console.error('Error al agregar la cepa', error);
@@ -21,29 +22,36 @@ async function addCultivo(req, res, data) {
     }
 }
 
-// Función para editar una cepa existente
+// Función para editar un cultivo existente
 async function editCultivo(req, res, data, id) {
-    const { nombre, origen, medio } = data; // Obtener los nuevos datos de la cepa desde la solicitud
-    const editCepaScript = 'UPDATE cepas SET nombre = $1, origen = $2, medio = $3 WHERE id = $4';
+    const { nombre, motivo, cepa_id } = data; 
+    console.log(nombre);
+    console.log(motivo);
+    console.log(cepa_id);
+    console.log(id);
+    const editCultivoScript = 'UPDATE cultivos SET nombre = $1, motivo = $2, cepa_id=$3 WHERE id = $4';
     
     try {
-        // Ejecutar la consulta para editar la cepa en la tabla "cepas"
-        await connection.query(editCepaScript, [nombre, origen, medio, id]);
-        res.status(200).json({ message: 'Cepa editada correctamente', cepa_id: id });
+        
+        // Ejecutar la consulta para editar el cultivo en la tabla "cultivos"
+        await connection.query(editCultivoScript, [nombre, motivo,cepa_id, id]);
+        console.log('Cultivo editado correctamente');
+        res.status(200).json({ message: 'Cultivo editado correctamente', cultivo_id: id });
     } catch (error) {
-        console.error('Error al editar la cepa', error);
-        res.status(500).json({ error: 'Error de servidor al editar la cepa' });
+        console.error('Error al editar el cultivo', error);
+        res.status(500).json({ error: 'Error de servidor al editar el cultivo' });
     }
 }
 
+
 // Función para eliminar una cepa existente
 async function deleteCultivo(req, res, cepa_id) {
-    const deleteCepaScript = 'DELETE FROM cepas WHERE id = $1';
+    const deleteCepaScript = 'DELETE FROM cultivos WHERE id = $1';
     
     try {
         // Ejecutar la consulta para eliminar la cepa de la tabla "cepas"
         await connection.query(deleteCepaScript, [cepa_id]);
-        res.status(200).json({ message: 'Cepa eliminada correctamente', cepa_id: cepa_id });
+        res.status(200).json({ message: 'Cultivo eliminado correctamente', cepa_id: cepa_id });
     } catch (error) {
         console.error('Error al eliminar la cepa', error);
         res.status(500).json({ error: 'Error de servidor al eliminar la cepa' });
@@ -70,7 +78,7 @@ async function getCultivo(req, res, cepa_id) {
 
 // Función para obtener todas las cepas
 async function getAllCultivos(req, res, user_id) {
-    const getAllCepasScript = 'SELECT * FROM cepas WHERE user_id = $1';
+    const getAllCepasScript = 'SELECT c.*, ce.nombre AS nombre_cepa FROM cultivos c INNER JOIN cepas ce ON c.cepa_id = ce.id WHERE c.user_id = $1;';
     
     try {
         // Ejecutar la consulta para obtener todas las cepas de la tabla "cepas"
