@@ -39,3 +39,12 @@ CREATE TABLE cultivos (
   FOREIGN KEY (cepa_id) REFERENCES cepas(id)
 );
 
+--Crear la tabla "biomasa"
+CREATE TABLE biomasa (
+  id VARCHAR PRIMARY KEY,
+  user_id VARCHAR,
+  cultivo_id VARCHAR,
+  cantidad VARCHAR,
+  fecha DATE,
+  FOREIGN KEY (cultivo_id) REFERENCES cultivos(id)
+);
