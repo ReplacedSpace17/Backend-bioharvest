@@ -8,14 +8,13 @@ CREATE TABLE users (
   activate BOOLEAN
 );
 
--- Crear la tabla "personal_information"
 CREATE TABLE personal_information (
   uid VARCHAR PRIMARY KEY,
   nombre VARCHAR,
   apellidop VARCHAR,
   apellidom VARCHAR,
   avatar VARCHAR,
-  nacimiento DATE
+  nacimiento DATE,
   FOREIGN KEY (uid) REFERENCES users(uid)
 );
 

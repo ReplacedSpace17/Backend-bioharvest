@@ -1,23 +1,40 @@
 const { Pool } = require('pg');
 
+const connection = new Pool({
+  user: 'rs17', // Usuario de la base de datos PostgreSQL
+  host: 'apps-posgrado-database.postgres.database.azure.com', // Dirección del servidor PostgreSQL
+  database: 'bioharvest-db', // Nombre de la base de datos
+  password: 'Javier117', // Contraseña del usuario
+  port: 5432, // Puerto de la base de datos PostgreSQL
+  ssl: {
+    require: true // Requiere conexión SSL
+  }
+});
 
+
+/* azure
+const connection = new Pool({
+  user: 'rs17', // Usuario de la base de datos PostgreSQL
+  host: 'labgpro-server-db.postgres.database.azure.com', // Dirección del servidor PostgreSQL
+  database: 'bioharvest', // Nombre de la base de datos
+  password: 'tu_contraseña', // Contraseña del usuario
+  port: 5432, // Puerto de la base de datos PostgreSQL
+  ssl: {
+    require: true // Requiere conexión SSL
+  }
+});
+
+
+
+
+
+linux local postgres
 const connection = new Pool({
   user: 'postgres',
   host: 'localhost', // o la dirección de tu servidor PostgreSQL
   database: 'bioharvest',
   password: 'root',
   port: 5432, // El puerto predeterminado de PostgreSQL es 5432
-});
-
-
-/*
-const connection = new Pool({
-  user: 'bioharvest_user',
-  host: 'dpg-cmsfsued3nmc73esh140-a.oregon-postgres.render.com',
-  database: 'bioharvest',
-  password: 'PfCB7mQIE209GgpsHTjZlivaEmgeKrlc',
-  port: 5432,
-  ssl: true // Agregar esta línea
 });
 */
 
@@ -33,36 +50,3 @@ connection.connect((error, client, done) => {
 
 module.exports = connection;
 
-
-/*
-CONECCION EN LINUX
-
-const connection = new Pool({
-  user: 'postgres',
-  host: 'localhost', // o la dirección de tu servidor PostgreSQL
-  database: 'cognitivedb',
-  password: 'root',
-  port: 5432, // El puerto predeterminado de PostgreSQL es 5432
-});
-
-CONECCION EN windows
-
-const connection = new Pool({
-  user: 'postgres',
-  host: 'localhost', // o la dirección de tu servidor PostgreSQL
-  database: 'cognitivedb',
-  password: 'root',
-  port: 5432, // El puerto predeterminado de PostgreSQL es 5432
-});
-
- Para acceder a postgresql
- sudo -u postgres psql
-
- Mostrar db
- \l
-
- Conectarme a db
- \c nameDB;
- Listar tablas
- \dt
- */
