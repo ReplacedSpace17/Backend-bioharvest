@@ -45,7 +45,7 @@ async function addUser(req, res, data) {
     console.error('Error al agregar usuario', error);
     res.status(500).json({ error: 'Error de servidor al agregar usuario' });
   }
-  const addPersonalInfoScript = 'INSERT INTO personal_information (uid, nombre, apellidop, apellidom, avatar, nacimiento) VALUES ($1, $2, $3, $4, $5, $6)';
+  const addPersonalInfoScript = 'INSERT INTO informationUser (uid, nombre, apellidop, apellidom, avatar, nacimiento) VALUES ($1, $2, $3, $4, $5, $6)';
   try {
     await connection.query(addPersonalInfoScript, [uid, data.Nombre, data.ApellidoPaterno, data.ApellidoMaterno, "default", "2000-01-01"]);
     res.status(201).json({ message: 'Usuario agregado correctamente', uid: uid, email: data.Correo });
@@ -70,7 +70,7 @@ async function activateUser(req, res, email) {
 // Función para actualizar la información personal de un usuario existente
 async function updatePersonalInfo(req, res, nacimiento, avatar, uid) {
   const updatePersonalInfoScript = `
-    UPDATE personal_information
+    UPDATE informationUser
     SET avatar = $1, nacimiento = $2
     WHERE uid = $3
   `;

@@ -3,13 +3,13 @@ CREATE DATABASE bioharvest;
 -- Crear la tabla "users"
 CREATE TABLE users (
   uid VARCHAR PRIMARY KEY,
-  email VARCHAR,
+  email VARCHAR,  
   password VARCHAR,
   activate BOOLEAN
 );
 
--- Crear la tabla "personal_information"
-CREATE TABLE personal_information (
+-- Crear la tabla "informationUser"
+CREATE TABLE informationUser (
   uid VARCHAR PRIMARY KEY,
   nombre VARCHAR,
   apellidop VARCHAR,

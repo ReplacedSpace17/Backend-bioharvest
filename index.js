@@ -25,7 +25,7 @@ app.use(session({
 // configuracion de funciones
 const { checkEmailExists, addUser, activateUser, updatePersonalInfo } = require('./CrearCuenta/functionAccountNew');
 const {Login} = require('./Login/functionsLogin');
-const {addCepa, editCepa, deleteCepa, getCepa, getAllCepas} = require('./CepasYCultivos/FunctionsCepas');
+const {addCepa, editCepa, deleteCepa, getCepa, getAllCepas, getMedioCepas} = require('./CepasYCultivos/FunctionsCepas');
 const {addCultivo, editCultivo, deleteCultivo, getCultivo, getAllCultivos} = require('./CepasYCultivos/FunctionsCultivos');
 
 let codigoInfo = {};
@@ -128,6 +128,13 @@ app.delete('/api/cepas/:id', async (req, res) => {
   const id = req.params.id;
   console.log("Eliminando cepa: " + id);
   deleteCepa(req, res, id);
+});
+
+//get cepa medio
+app.get('/api/cepas/medio/:id', async (req, res) => {
+  const id = req.params.id;
+  //console.log("Form data: " + formData.Email);
+  getMedioCepas(req, res, id);
 });
 
 ////////////////////////////////////////////////////////-----------------> Cultivos

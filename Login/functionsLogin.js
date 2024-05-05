@@ -20,7 +20,7 @@ async function Login(data) {
     FROM 
       users u
     INNER JOIN 
-      personal_information p
+      informationUser p
     ON 
       u.uid = p.uid
     WHERE 

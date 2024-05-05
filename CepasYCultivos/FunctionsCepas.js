@@ -5,6 +5,15 @@ function generarID() {
   return uuidv4();
 }
 
+/*CREATE TABLE cepas (
+  id VARCHAR PRIMARY KEY,
+  user_id VARCHAR,
+  nombre VARCHAR,
+  origen VARCHAR,
+  medio VARCHAR,
+  FOREIGN KEY (user_id) REFERENCES users(uid)
+);*/
+
 // Función para agregar una nueva cepa
 async function addCepa(req, res, data) {
     const cepa_id = generarID(); // Generar un nuevo ID para la cepa
@@ -91,7 +100,30 @@ async function getAllCepas(req, res, user_id) {
     }
 }
 
+//Function para obtener cuantas cepas de el medio dulce y cuantas del salado tiene el usuario
+//regresar un json con la cantidad de cada uno con el siguiente formato
+// {dulce: 2, salado: 3}
+async function getMedioCepas(req, res, user_id) {
+    const getMedioCepasScript = 'SELECT medio, COUNT(*) FROM cepas WHERE user_id = $1 GROUP BY medio';
+    
+    try {
+        // Ejecutar la consulta para obtener la cantidad de cepas de cada medio
+        const result = await connection.query(getMedioCepasScript, [user_id]);
+        if (result.rows.length > 0) {
+            //como regreso el json pero tambien en cada registro un autoincremental llamado NumCepa
+            
+            res.status(200).json({"Dulce": result.rows[0].count, "Salada": result.rows[1].count}); // Devolver la cantidad de cepas de cada medio
+        } else {
+            res.status(404).json({ message: 'No se encontraron cepas en la base de datos' });
+        }
+    } catch (error) {
+        console.error('Error al obtener todas las cepas', error);
+        res.status(500).json({ error: 'Error de servidor al obtener todas las cepas' });
+    }
+}
+
+
 
   module.exports = {
-    addCepa, editCepa, deleteCepa, getCepa, getAllCepas
+    addCepa, editCepa, deleteCepa, getCepa, getAllCepas,getMedioCepas
   };
