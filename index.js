@@ -1,7 +1,7 @@
 const express = require('express');
 const connection = require('./SQL_CONECTION');
 const app = express();
-const port = 3000;
+const port = 3002;
 const cors = require('cors'); // Importa el middleware CORS
 const bodyParser = require('body-parser');
 const fs = require('fs');
@@ -260,9 +260,14 @@ app.get('/test', (req, res) => {
   res.send('¡Hola, mundo!');
   //console.log("Test");
 });
+app.get('/', (req, res) => {
+  res.send('Backend online');
+  //console.log("Test");
+});
+
 
 // Inicia el servidor
 app.listen(port, () => {
-  //console.log(`Servidor corriendo en http://localhost:${port}`);
+  console.log(`Servidor corriendo en http://localhost:${port}`);
 
 });
