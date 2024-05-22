@@ -9,8 +9,36 @@ const nodemailer = require('nodemailer');
 app.use(bodyParser.json({ limit: '20mb' })); // Ajusta el límite según tus necesidades
 app.use('/uploads', express.static('uploads'));
 
-app.use(cors()); // Habilita el middleware CORS
+app.use(cors({
+  origin: '*', // Origen permitido (URL de tu aplicación de React) http://20.102.109.114:3001/
+  credentials: true, // Habilita el envío de cookies de origen a través de CORS
+}));
+
+
+
+const { expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
+// other app.use() options ...
+app.use(expressCspHeader({ 
+    policies: { 
+        'default-src': [expressCspHeader.NONE], 
+        'img-src': [expressCspHeader.SELF], 
+        'script-src': [expressCspHeader.SELF],
+        'style-src': [expressCspHeader.SELF],
+        'object-src': [expressCspHeader.NONE],
+        'frame-src': [expressCspHeader.NONE],
+        'base-uri': [expressCspHeader.NONE],
+        'form-action': [expressCspHeader.NONE],
+        'frame-ancestors': [expressCspHeader.NONE],
+        'manifest-src': [expressCspHeader.NONE],
+        'media-src': [expressCspHeader.NONE],
+        'worker-src': [expressCspHeader.NONE]
+    } 
+}));  
+
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(express.static('public'));
 const session = require('express-session');
 const multer = require('multer');
 // Importa la librería jsonwebtoken
