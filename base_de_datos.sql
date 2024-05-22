@@ -15,7 +15,7 @@ CREATE TABLE informationUser (
   apellidop VARCHAR,
   apellidom VARCHAR,
   avatar VARCHAR,
-  nacimiento DATE
+  nacimiento DATE,
   FOREIGN KEY (uid) REFERENCES users(uid)
 );
 

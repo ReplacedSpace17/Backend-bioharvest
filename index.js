@@ -25,8 +25,8 @@ app.use(session({
 // configuracion de funciones
 const { checkEmailExists, addUser, activateUser, updatePersonalInfo } = require('./CrearCuenta/functionAccountNew');
 const {Login} = require('./Login/functionsLogin');
-const {addCepa, editCepa, deleteCepa, getCepa, getAllCepas, getMedioCepas} = require('./CepasYCultivos/FunctionsCepas');
-const {addCultivo, editCultivo, deleteCultivo, getCultivo, getAllCultivos} = require('./CepasYCultivos/FunctionsCultivos');
+const {addCepa, editCepa, deleteCepa, getCepa, getAllCepas, getMedioCepas, getTotalCepas} = require('./CepasYCultivos/FunctionsCepas');
+const {addCultivo, editCultivo, deleteCultivo, getCultivo, getAllCultivos, getCultivoCountByUser} = require('./CepasYCultivos/FunctionsCultivos');
 
 let codigoInfo = {};
 let time;
@@ -137,6 +137,13 @@ app.get('/api/cepas/medio/:id', async (req, res) => {
   getMedioCepas(req, res, id);
 });
 
+//get cepa total
+app.get('/api/cepas/total/:id', async (req, res) => {
+  const id = req.params.id;
+  //console.log("Form data: " + formData.Email);
+  getTotalCepas(req, res, id);
+});
+
 ////////////////////////////////////////////////////////-----------------> Cultivos
 // Crear un cultivo
 app.post('/api/cultivos/', async (req, res) => {
@@ -162,6 +169,14 @@ app.delete('/api/cultivos/:id', async (req, res) => {
   const id = req.params.id;
   console.log("Eliminando cepa: " + id);
   deleteCultivo(req, res, id);
+
+});
+
+//get coutn cultivos
+app.get('/api/cultivos/count/:id', async (req, res) => {
+  const id = req.params.id;
+  //console.log("Form data: " + formData.Email);
+  getCultivoCountByUser(req, res, id);
 });
 
 ////////////////////////////////////////////////////////-----------------> Incidencias

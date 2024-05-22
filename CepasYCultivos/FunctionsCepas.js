@@ -123,7 +123,39 @@ async function getMedioCepas(req, res, user_id) {
 }
 
 
+// Función para obtener el número total de cepas y el número de cepas por cada medio
+async function getTotalCepas(req, res, user_id) {
+    const getTotalCepasScript = `
+        SELECT 
+            SUM(CASE WHEN medio = 'Dulce' THEN 1 ELSE 0 END) AS Dulce,
+            SUM(CASE WHEN medio = 'Salada' THEN 1 ELSE 0 END) AS Salada,
+            COUNT(*) AS total
+        FROM cepas
+        WHERE user_id = $1
+    `;
 
-  module.exports = {
-    addCepa, editCepa, deleteCepa, getCepa, getAllCepas,getMedioCepas
-  };
+    try {
+        // Ejecutar la consulta para obtener el total de cepas y las categorizadas por medio
+        const result = await connection.query(getTotalCepasScript, [user_id]);
+        if (result.rows.length > 0) {
+            const { dulce, salada, total } = result.rows[0];
+            res.status(200).json({ dulce: parseInt(dulce, 10), salado: parseInt(salada, 10), total: parseInt(total, 10) });
+        } else {
+            res.status(404).json({ message: 'No se encontraron cepas en la base de datos' });
+        }
+    } catch (error) {
+        console.error('Error al obtener el total de cepas', error);
+        res.status(500).json({ error: 'Error de servidor al obtener el total de cepas' });
+    }
+}
+
+
+module.exports = {
+    addCepa, 
+    editCepa, 
+    deleteCepa, 
+    getCepa, 
+    getAllCepas,
+    getMedioCepas,
+    getTotalCepas // Exportar la nueva función
+};

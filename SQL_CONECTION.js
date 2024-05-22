@@ -1,6 +1,6 @@
 const { Pool } = require('pg');
 
-
+/*
 const connection = new Pool({
   user: 'postgres',
   host: 'localhost', // o la dirección de tu servidor PostgreSQL
@@ -8,19 +8,26 @@ const connection = new Pool({
   password: 'root',
   port: 5432, // El puerto predeterminado de PostgreSQL es 5432
 });
-
-
-/*
-const connection = new Pool({
-  user: 'bioharvest_user',
-  host: 'dpg-cmsfsued3nmc73esh140-a.oregon-postgres.render.com',
-  database: 'bioharvest',
-  password: 'PfCB7mQIE209GgpsHTjZlivaEmgeKrlc',
-  port: 5432,
-  ssl: true // Agregar esta línea
-});
 */
 
+
+
+const HOST_DB = process.env.HOSTDB || 'apps-posgrado-database.postgres.database.azure.com';
+const USR_NAME = process.env.USERDB || 'rs17';
+const PWD_DB = process.env.PASSWORD || 'Javier117';
+const DB_NAME = process.env.DATABASE || 'bioharvest-db';
+const PORT_DB = process.env.PORT || 5432;
+
+const connection = new Pool({
+  user: USR_NAME,
+  host: HOST_DB, // o la dirección de tu servidor PostgreSQL
+  database: DB_NAME,
+  password: PWD_DB,
+  port: PORT_DB, // El puerto predeterminado de PostgreSQL es 5432
+  ssl: true, // Habilita la conexión SSL
+});
+
+//postgres://rs17:'Javier117'@apps-posgrado-database.postgres.database.azure.com:5432/bioharvest-db
 
 connection.connect((error, client, done) => {
   if (error) {

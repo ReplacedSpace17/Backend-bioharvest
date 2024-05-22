@@ -78,7 +78,7 @@ async function getCultivo(req, res, cepa_id) {
 
 // Función para obtener todas las cepas
 async function getAllCultivos(req, res, user_id) {
-    const getAllCepasScript = 'SELECT c.*, ce.nombre AS nombre_cepa FROM cultivos c INNER JOIN cepas ce ON c.cepa_id = ce.id WHERE c.user_id = $1;';
+    const getAllCepasScript = 'SELECT c.*, ce.origen AS origen, ce.nombre AS nombre_cepa FROM cultivos c INNER JOIN cepas ce ON c.cepa_id = ce.id WHERE c.user_id = $1;';
     
     try {
         // Ejecutar la consulta para obtener todas las cepas de la tabla "cepas"
@@ -95,10 +95,25 @@ async function getAllCultivos(req, res, user_id) {
 }
 
 
-  module.exports = {
+// Función para obtener el número de cultivos creados por un usuario
+async function getCultivoCountByUser(req, res, user_id) {
+    const countCultivosScript = 'SELECT COUNT(*) AS cultivo_count FROM cultivos WHERE user_id = $1';
+    
+    try {
+        // Ejecutar la consulta para contar los cultivos del usuario
+        const result = await connection.query(countCultivosScript, [user_id]);
+        res.status(200).json({ cultivo_count: result.rows[0].cultivo_count }); // Devolver el número de cultivos
+    } catch (error) {
+        console.error('Error al obtener el número de cultivos', error);
+        res.status(500).json({ error: 'Error de servidor al obtener el número de cultivos' });
+    }
+}
+
+module.exports = {
     addCultivo,
     editCultivo,
     deleteCultivo,
     getCultivo,
-    getAllCultivos
-  };
+    getAllCultivos,
+    getCultivoCountByUser
+};
